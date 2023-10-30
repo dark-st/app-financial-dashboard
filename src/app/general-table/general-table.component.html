@@ -1,0 +1,102 @@
+<h1>Загальна таблиця</h1>
+<div class="container">
+
+    <div>
+        <h2>Фільтри</h2>
+        <div class="date-filter">
+            <form class="row row-cols-sm-auto">
+                <div class="col-12">
+                    <div class="dp-hidden position-absolute">
+                        <div class="input-group">
+                            <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker"
+                                [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+                                [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate!" tabindex="-1" />
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                                    [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                                    (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate"
+                            [value]="formatter.format(fromDate)"
+                            (input)="fromDate = validateInput(fromDate, dpFromDate.value)" />
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()"
+                            type="button"></button>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="input-group">
+                        <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate"
+                            [value]="formatter.format(toDate)"
+                            (input)="toDate = validateInput(toDate, dpToDate.value)" />
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="datepicker.toggle()"
+                            type="button"></button>
+                    </div>
+                </div>
+
+                <div class="input-group my-2">
+                    <input #isIssuance type="radio" id="issuance-filter" name="date-filter-option">
+                    <label class="ms-2" for="issuance-filter">Фільтр
+                        періоду дат видачі кредиту</label>
+                </div>
+
+                <div class="input-group my-2">
+                    <input #isReturn type="radio" id="actual-return-filter" name="date-filter-option">
+                    <label class="ms-2" for="actual-return-filter">Фільтр періоду дат повернення кредиту</label>
+                </div>
+
+                <div class="input-group my-2">
+                    <input type="radio" id="overdue-filter" name="date-filter-option">
+                    <label class="ms-2" for="overdue-filter">Фільтр для відображення просрочених кредитів</label>
+                </div>
+
+                <div class="input-group my-2">
+                    <button type="button" class="btn btn-secondary"
+                        (click)="sorting.showRes(isIssuance.checked, isReturn.checked, fromDate, toDate)">Застосувати
+                        фільтр</button>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+    <div class="reset-filter">
+        <button type="button" class="btn btn-secondary" (click)="sorting.clearFilter()">Прибрати фільтр</button>
+
+    </div>
+
+    <table class="table table-hover mt-2">
+        <thead>
+            <tr>
+                <th class="table__id" scope="col">№</th>
+                <th scope="col">Клієнт</th>
+                <th scope="col">Дата видачі</th>
+                <th scope="col">Дата повернення</th>
+                <th scope="col">Фактична дата повернення</th>
+                <th scope="col">Сума</th>
+                <th scope="col">Сума нарахованих відсотків</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let credit of sorting.filteredCredits$ | async">
+                <th class="td table__id" scope="row">{{ credit.id }}</th>
+                <td class="td">{{ credit.user }}</td>
+                <td class="td">{{ credit.issuance_date | date}}</td>
+                <td class="td">{{ credit.return_date | date}}</td>
+                <td class="td">{{
+                    credit.actual_return_date
+                    ? (credit.actual_return_date | date)
+                    : '-'
+                    }}</td>
+                <td class="td">{{ credit.body + ' грн.'}} </td>
+                <td class="td">{{ credit.percent }}</td>
+
+            </tr>
+        </tbody>
+    </table>
+</div>
