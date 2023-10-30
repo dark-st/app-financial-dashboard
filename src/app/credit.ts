@@ -1,9 +1,9 @@
 export interface Credit {
     id: number,
     user: string,
-    issuance_date: Date,
-    return_date: Date,
-    actual_return_date: Date,
+    issuance_date: string,
+    return_date: string,
+    actual_return_date: string,
     body: number,
-    percent: number
+    percent: number,
 }

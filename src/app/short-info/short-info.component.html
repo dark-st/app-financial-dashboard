@@ -1,1 +1,25 @@
-<p>short-info works!</p>
+<h1>Коротка інформація</h1>
+
+<table class="table table-hover mt-3">
+    <thead>
+        <tr>
+            <th scope="col">Місяць/Рік</th>
+            <th scope="col">Загальна кількість виданих кредитів по місяцях</th>
+            <th scope="col">Середня сума видачі кредитів по місяцях</th>
+            <th scope="col">Загальна сума виданих кредитів по місяцях</th>
+            <th scope="col">Загальна сума нарахованих відсотків по місяцях</th>
+            <th scope="col">Загальна кількість повернених кредитів по місяцях</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let item of statisticsData$ | async">
+            <td class="td">{{ item.month }}</td>
+            <td class="td">{{ item.totalCredits }}</td>
+            <td class="td">{{ item.averageAmount.toFixed(2) }}</td>
+            <td class="td">{{ item.totalAmount }}</td>
+            <td class="td">{{ item.totalPercent }}</td>
+            <td class="td">{{ item.totalReturned }}</td>
+
+        </tr>
+    </tbody>
+</table>
